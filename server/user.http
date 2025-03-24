@@ -1,0 +1,43 @@
+@host = http://localhost:3000
+@userId = 67e168dd44f75c33e8af8a2b
+@token = eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2UxNjhkZDQ0Zjc1YzMzZThhZjhhMmIiLCJlbWFpbCI6ImpvaG4uZG9lQGtzdS5sb2NhbCIsIm5hbWUiOiJKb2huIiwiaWF0IjoxNzQyODI1NzA1LCJleHAiOjE3NDU4MjU3MDV9.2GHYWHJZ4t6covtNdVWFqvZa_jlykjmeebisD7r45s9qhQTiP7Pl07vkdU44Brs-iDyddyaHqyTHnuQTq4TM1w
+
+### Login user by email and password
+POST {{host}}/api/users/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "john.doe@ksu.local",
+  "password": "password123"
+}
+
+
+### Create a new user
+POST {{host}}/api/users HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "john.doe@ksu.local",
+  "name": "John",
+  "password": "password123"
+}
+
+
+### Get user by ID
+GET {{host}}/api/users/{{userId}} HTTP/1.1
+Authorization: Bearer {{token}}
+
+
+### Update user
+PATCH {{host}}/api/users HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "John_2"
+}
+
+
+### Delete user by ID
+DELETE {{host}}/api/users HTTP/1.1
+Authorization: Bearer {{token}}
