@@ -8,9 +8,13 @@ export class BcryptCrypto {
   constructor(private readonly saltRounds: number) {}
 
   public async hashPassword(password: string): Promise<string> {
-    this.logger.log(`Generating salt and hashing password`);
+    this.logger.log(`Started generate salt`);
     const salt = await genSalt(this.saltRounds);
-    return hash(password, salt);
+    this.logger.log(`Started hashing password`);
+    const hashedPassword = await hash(password, salt);
+    this.logger.log(`Finish hashing password`);
+
+    return hashedPassword;
   }
 
   public async verifyPassword(
