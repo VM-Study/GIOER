@@ -5,8 +5,7 @@ import { compare, genSalt, hash } from 'bcrypt';
 export class BcryptCrypto {
   private readonly logger = new Logger(BcryptCrypto.name);
 
-  constructor(private readonly saltRounds: number) {
-  }
+  constructor(private readonly saltRounds: number) {}
 
   public async hashPassword(password: string): Promise<string> {
     this.logger.log(`Generating salt and hashing password`);
@@ -16,7 +15,7 @@ export class BcryptCrypto {
 
   public async verifyPassword(
     inputPassword: string,
-    storedHash: string
+    storedHash: string,
   ): Promise<boolean> {
     this.logger.log(`Verifying password...`);
     return compare(inputPassword, storedHash);

@@ -15,14 +15,13 @@ import { UserService } from './user.service';
     MongooseModule.forFeature([{ name: UserModel.name, schema: UserSchema }]),
     CryptoModule,
     JwtModule.registerAsync(getJwtAsyncOptions()),
-    ConfigModule
+    ConfigModule,
   ],
   controllers: [UserController],
   providers: [UserService, UserRepository, LocalStrategy, JwtAccessStrategy],
-  exports: [UserService]
+  exports: [UserService],
 })
-export class UserModule {
-}
+export class UserModule {}
 
 function getJwtAsyncOptions(): JwtModuleAsyncOptions {
   return {
@@ -32,10 +31,10 @@ function getJwtAsyncOptions(): JwtModuleAsyncOptions {
         secret: configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
         signOptions: {
           expiresIn: configService.get<string>('JWT_ACCESS_TOKEN_EXPIRES_IN'),
-          algorithm: 'HS512'
-        }
+          algorithm: 'HS512',
+        },
       };
     },
-    inject: [ConfigService]
+    inject: [ConfigService],
   };
 }

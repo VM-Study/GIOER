@@ -10,18 +10,19 @@ import { UserModel } from './user.schema';
 export class UserRepository {
   private readonly logger = new Logger(UserRepository.name);
 
-  constructor(@InjectModel(UserModel.name) private readonly model: Model<UserModel>) {
-  }
+  constructor(
+    @InjectModel(UserModel.name) private readonly model: Model<UserModel>,
+  ) {}
 
   protected createEntityFromDocument(
-    entityDocument: Document
+    entityDocument: Document,
   ): UserEntity | null {
     if (!entityDocument) {
       return null;
     }
 
     const plainObject = entityDocument.toObject({
-      versionKey: false
+      versionKey: false,
     });
 
     return UserFactory.createEntity(plainObject);
@@ -31,17 +32,17 @@ export class UserRepository {
     const entityToLog = { ...entity };
     entityToLog.password = '';
 
-    this.logger.log(`Saving new entity: ${JSON.stringify(entityToLog)}`);
+    this.logger.log(`Saving new user: ${JSON.stringify(entityToLog)}`);
     const newEntity = new this.model(entity.toPOJO());
     const savedEntity = await newEntity.save();
     newEntity.id = savedEntity.id;
-    this.logger.log(`Entity saved with ID: '${savedEntity.id}'`);
+    this.logger.log(`User saved with ID: '${savedEntity.id}'`);
 
     return this.createEntityFromDocument(newEntity);
   }
 
   public async findById(id: string): Promise<UserEntity | null> {
-    this.logger.log(`Finding document by ID: '${id}'`);
+    this.logger.log(`Finding user by ID: '${id}'`);
     const foundDocument = await this.model.findById(new ObjectId(id));
 
     return this.createEntityFromDocument(foundDocument);
@@ -52,24 +53,24 @@ export class UserRepository {
     const updatedDocument = await this.model.findByIdAndUpdate(
       new ObjectId(id),
       entity.toPOJO(),
-      { new: true }
+      { new: true },
     );
     if (!updatedDocument) {
       this.logger.error(`User not found for update: ID ${id}`);
-      throw new NotFoundException(`Entity with id ${entity.id} not found`);
+      throw new NotFoundException(`User with id ${entity.id} not found`);
     }
 
     return this.createEntityFromDocument(updatedDocument);
   }
 
   public async deleteById(id: string): Promise<UserEntity> {
-    this.logger.log(`Deleting entity by ID: '${id}'`);
+    this.logger.log(`Deleting user by ID: '${id}'`);
     const deletedDocument = await this.model.findByIdAndDelete(
-      new ObjectId(id)
+      new ObjectId(id),
     );
     if (!deletedDocument) {
-      this.logger.error(`Entity not found for deletion: ID ${id}`);
-      throw new NotFoundException(`Entity with id ${id} not found.`);
+      this.logger.error(`User not found for deletion: ID ${id}`);
+      throw new NotFoundException(`User with id ${id} not found.`);
     }
 
     return this.createEntityFromDocument(deletedDocument);

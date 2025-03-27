@@ -3,10 +3,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule, MongooseModuleAsyncOptions } from '@nestjs/mongoose';
 
 @Module({
-  imports: [MongooseModule.forRootAsync(getMongooseOptions())]
+  imports: [MongooseModule.forRootAsync(getMongooseOptions())],
 })
-export class DatabaseModule {
-}
+export class DatabaseModule {}
 
 function getMongooseOptions(): MongooseModuleAsyncOptions {
   return {
@@ -19,21 +18,21 @@ function getMongooseOptions(): MongooseModuleAsyncOptions {
           host: config.get<string>('MONGO_HOST'),
           port: config.get<number>('MONGO_PORT'),
           authDatabase: config.get<string>('MONGO_AUTH_BASE'),
-          databaseName: config.get<string>('MONGO_DB')
-        })
+          databaseName: config.get<string>('MONGO_DB'),
+        }),
       };
     },
-    inject: [ConfigService]
+    inject: [ConfigService],
   };
 }
 
 function getMongoConnectionString({
-                                    username,
-                                    password,
-                                    host,
-                                    port,
-                                    databaseName,
-                                    authDatabase
-                                  }): string {
+  username,
+  password,
+  host,
+  port,
+  databaseName,
+  authDatabase,
+}): string {
   return `mongodb://${username}:${password}@${host}:${port}/${databaseName}?authSource=${authDatabase}`;
 }

@@ -1,6 +1,6 @@
 import { instanceToPlain } from 'class-transformer';
 import { Entity } from '../../base/entity';
-import { User } from '../../type/user/user';
+import { User } from './user';
 
 export class UserEntity extends Entity implements User {
   name: string;
@@ -24,7 +24,7 @@ export class UserEntity extends Entity implements User {
     const { _id, ...rest } = instanceToPlain(this);
     return {
       ...rest,
-      id: this.id
+      id: this.id,
     };
   }
 }

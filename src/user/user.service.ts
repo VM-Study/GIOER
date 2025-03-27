@@ -5,19 +5,23 @@ import {
   Injectable,
   Logger,
   NotFoundException,
-  UnauthorizedException
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { BcryptCrypto } from '../crypto/bcrypt.crypto';
 import { Token } from '../type/token.interface';
-import { CreateUserDto } from '../type/user/dto/create-user.dto';
-import { LoginDto } from '../type/user/dto/login.dto';
-import { UpdateUserDto } from '../type/user/dto/update-user.dto';
 import { createJWTPayload } from './authentication/jwt';
 import { UserEntity } from './entity/user.entity';
 import { UserFactory } from './entity/user.factory';
 import { UserRepository } from './entity/user.repository';
-import { USER_AUTHENTICATION_PASSWORD_WRONG, USER_EXISTS, USER_NOT_FOUND } from './user.constant';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { LoginDto } from './dto/login.dto';
+import {
+  USER_AUTHENTICATION_PASSWORD_WRONG,
+  USER_EXISTS,
+  USER_NOT_FOUND,
+} from './user.messages';
 
 @Injectable()
 export class UserService {
@@ -26,9 +30,8 @@ export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly bcryptCrypto: BcryptCrypto,
-    private readonly jwtService: JwtService
-  ) {
-  }
+    private readonly jwtService: JwtService,
+  ) {}
 
   public async createUser(dto: CreateUserDto): Promise<UserEntity> {
     const { email, name, password } = dto;
@@ -44,7 +47,7 @@ export class UserService {
     const userData = {
       name: name,
       email: email,
-      password: hashPassword
+      password: hashPassword,
     };
 
     const userEntity = UserFactory.createEntity(userData);
@@ -67,7 +70,7 @@ export class UserService {
 
   public async updateUserById(
     userId: string,
-    dto: UpdateUserDto
+    dto: UpdateUserDto,
   ): Promise<UserEntity> {
     this.logger.log(`Updating user with ID: '${userId}'`);
     const updatedUser = await this.findUserById(userId);
@@ -104,7 +107,7 @@ export class UserService {
     try {
       const accessToken = await this.jwtService.signAsync(accessTokenPayload);
       this.logger.log(
-        `Tokens generated successfully for user ID: '${user.id}'`
+        `Tokens generated successfully for user ID: '${user.id}'`,
       );
 
       return { accessToken };
@@ -112,7 +115,7 @@ export class UserService {
       this.logger.error('[Tokens generation error]: ' + error.message);
       throw new HttpException(
         'Tokens generation error.',
-        HttpStatus.INTERNAL_SERVER_ERROR
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
@@ -129,7 +132,7 @@ export class UserService {
 
     const isPasswordCorrect = await this.bcryptCrypto.verifyPassword(
       password,
-      existUser.password
+      existUser.password,
     );
     if (!isPasswordCorrect) {
       this.logger.warn(`Incorrect password attempt for user: ${dto.email}`);

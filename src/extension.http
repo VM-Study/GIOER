@@ -1,0 +1,54 @@
+@host = http://localhost:3000
+@extensionId = 67e58d08bc88889faa8a8ca0
+@token = eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2U1NzU0ZDRkODM2ZTU5ZWYzNzhhMmUiLCJlbWFpbCI6ImpvaG4uZG9lQGtzdS5sb2NhbCIsIm5hbWUiOiJKb2huIiwiaWF0IjoxNzQzMDkxMDI2LCJleHAiOjE3NDYwOTEwMjZ9.HEJlOOWu-DabnYdoQjwJwrxcNDsKG6r2wNsaATMbU-gYOTAcEq4T8colpaIgtexEZYwdDvBabfOWhzk4VBsYpg
+
+### Create a new extension
+POST {{host}}/api/extensions HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "My Extension4",
+  "description": "This extension provides awesome productivity features.",
+  "category": "Productivity",
+  "tags": [
+    "Windows",
+    "MacOS",
+    "Linux"
+  ]
+}
+
+### Get extension by ID
+GET {{host}}/api/extensions/{{extensionId}} HTTP/1.1
+Authorization: Bearer {{token}}
+
+
+### Get extensions
+GET {{host}}/api/extensions HTTP/1.1
+Authorization: Bearer {{token}}
+
+### Get extension with Search
+@query1 = super
+GET {{host}}/api/extensions?query={{query1}} HTTP/1.1
+Authorization: Bearer {{token}}
+
+
+### Get extension with sort des
+@sortField = BY_UPLOAD_DATE
+GET {{host}}/api/extensions?sortField={{sortField}} HTTP/1.1
+Authorization: Bearer {{token}}
+
+
+### Update extension
+PATCH {{host}}/api/extensions/{{extensionId}} HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "My Super Extension"
+}
+
+
+### Delete extension by ID
+DELETE {{host}}/api/extensions/{{extensionId}} HTTP/1.1
+Authorization: Bearer {{token}}

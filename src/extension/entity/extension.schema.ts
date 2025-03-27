@@ -1,0 +1,52 @@
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Types } from 'mongoose';
+import { UserModel } from '../../user/entity/user.schema';
+
+@Schema({
+  collection: 'extensions',
+  timestamps: true,
+  toJSON: {
+    virtuals: true,
+    transform: (doc, ret) => {
+      delete ret._id;
+      delete ret.__v;
+    },
+  },
+  toObject: { virtuals: true },
+})
+export class ExtensionModel extends Document {
+  @Prop({ required: true, trim: true, unique: true })
+  title: string;
+
+  @Prop({ required: true, trim: true })
+  description: string;
+
+  @Prop({ required: true, trim: true })
+  category: string;
+
+  @Prop({ required: true })
+  tags: string[];
+
+  @Prop({ type: Types.ObjectId, ref: 'UserModel', required: true })
+  public author: UserModel;
+
+  @Prop({ required: true })
+  uploadDate: Date;
+
+  @Prop({ required: true })
+  public rating: number;
+
+  @Prop({ required: true })
+  public downloadCount: number;
+
+  @Prop({ required: true })
+  public archived: boolean;
+}
+
+export const ExtensionSchema = SchemaFactory.createForClass(ExtensionModel);
+
+ExtensionSchema.virtual('id').get(function (
+  this: Document & { _id: Types.ObjectId },
+) {
+  return this._id.toHexString();
+});

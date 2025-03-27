@@ -1,0 +1,6 @@
+export enum ExtensionSortType {
+  BY_RATING = 'BY_RATING',
+  BY_DOWNLOAD_COUNT = 'BY_DOWNLOAD_COUNT',
+  BY_UPLOAD_DATE = 'BY_UPLOAD_DATE',
+  BY_CATEGORY = 'BY_CATEGORY',
+}

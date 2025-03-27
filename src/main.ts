@@ -12,14 +12,14 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true
-    })
+      transform: true,
+    }),
   );
 
   app.enableCors({
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true
+    credentials: true,
   });
 
   const configService = app.get(AppConfiguration);
@@ -36,13 +36,13 @@ async function bootstrap() {
 
   await app.listen(configService.appPort);
   Logger.log(
-    `🚀 Application is running on: http://localhost:${configService.appPort}/${globalPrefix}`
+    `🚀 Application is running on: http://localhost:${configService.appPort}/${globalPrefix}`,
   );
   Logger.log(
-    `📚 Swagger is available on: http://localhost:${configService.appPort}/spec`
+    `📚 Swagger is available on: http://localhost:${configService.appPort}/spec`,
   );
   Logger.log(
-    `📚 Swagger YAML is available on: http://localhost:${configService.appPort}/spec-yaml`
+    `📚 Swagger YAML is available on: http://localhost:${configService.appPort}/spec-yaml`,
   );
 }
 

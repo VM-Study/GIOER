@@ -1,32 +1,49 @@
-import { Body, Controller, Delete, Get, HttpStatus, Logger, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Logger,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { MongoIdValidationPipe } from '../database/mongo-id-validation.pipe';
 import { GetUserId } from '../decorator/get-user.decorator';
 import { fillDto } from '../lib/common';
-import { CreateUserDto } from '../type/user/dto/create-user.dto';
-import { LoggedDto } from '../type/user/dto/logged.dto';
-import { LoginDto } from '../type/user/dto/login.dto';
-import { UpdateUserDto } from '../type/user/dto/update-user.dto';
-import { UserDto } from '../type/user/dto/user.dto';
 import { JwtAuthGuard } from './authentication/jwt-auth.guard';
 import { LocalAuthGuard } from './authentication/local-auth.guard';
 import { RequestWithUser } from './authentication/request-with-user.interface';
 import { UserService } from './user.service';
+import { UserDto } from './dto/user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { LoginDto } from './dto/login.dto';
+import { LoggedDto } from './dto/logged.dto';
 
 @ApiTags('users')
 @Controller('users')
 export class UserController {
   private readonly logger = new Logger(UserController.name);
 
-  constructor(private readonly userService: UserService) {
-  }
+  constructor(private readonly userService: UserService) {}
 
   @Post('')
   @ApiOperation({ summary: 'Create a new user' })
   @ApiResponse({
     status: 201,
     description: 'The user has been successfully created.',
-    type: UserDto
+    type: UserDto,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   public async createUser(@Body() dto: CreateUserDto): Promise<UserDto> {
@@ -43,11 +60,11 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully retrieved.',
-    type: UserDto
+    type: UserDto,
   })
   @ApiResponse({ status: 404, description: 'User not found.' })
   public async getUserById(
-    @Param('userId', MongoIdValidationPipe) userId: string
+    @Param('userId', MongoIdValidationPipe) userId: string,
   ): Promise<UserDto> {
     this.logger.log(`Retrieving user with ID: '${userId}'`);
     const foundUser = await this.userService.findUserById(userId);
@@ -62,7 +79,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'The current user has been successfully retrieved.',
-    type: UserDto
+    type: UserDto,
   })
   @ApiResponse({ status: 404, description: 'Current user not found.' })
   public async getUser(@GetUserId() userId: string): Promise<UserDto> {
@@ -79,12 +96,12 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully updated.',
-    type: UserDto
+    type: UserDto,
   })
   @ApiResponse({ status: 404, description: 'User not found.' })
   public async updateUser(
     @GetUserId() userId: string,
-    @Body() dto: UpdateUserDto
+    @Body() dto: UpdateUserDto,
   ): Promise<UserDto> {
     this.logger.log(`Updating user with ID '${userId}'`);
     const updatedUser = await this.userService.updateUserById(userId, dto);
@@ -99,7 +116,7 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully deleted.',
-    type: UserDto
+    type: UserDto,
   })
   @ApiResponse({ status: 404, description: 'User not found.' })
   public async deleteUser(@GetUserId() userId: string): Promise<UserDto> {
@@ -117,16 +134,16 @@ export class UserController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Login successful',
-    type: LoginDto
+    type: LoginDto,
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'User password is empty'
+    description: 'User password is empty',
   })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'User not found' })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
-    description: 'User password is wrong'
+    description: 'User password is wrong',
   })
   public async login(@Req() { user }: RequestWithUser): Promise<LoggedDto> {
     this.logger.log(`User logged in successfully: ${user.email}`);

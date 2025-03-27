@@ -12,7 +12,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   constructor(private readonly userService: UserService) {
     super({
-      usernameField: USERNAME_FIELD_NAME
+      usernameField: USERNAME_FIELD_NAME,
     });
   }
 

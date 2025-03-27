@@ -11,10 +11,9 @@ import { BcryptCrypto } from './bcrypt.crypto';
         const saltRounds = config.get<number>('APP_PASSWORD_SALT_ROUNDS');
         return new BcryptCrypto(saltRounds);
       },
-      inject: [ConfigService]
-    }
+      inject: [ConfigService],
+    },
   ],
-  exports: [BcryptCrypto]
+  exports: [BcryptCrypto],
 })
-export class CryptoModule {
-}
+export class CryptoModule {}

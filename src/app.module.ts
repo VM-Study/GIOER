@@ -4,21 +4,20 @@ import { AppConfiguration } from './config/app-configuration.service';
 import { validate } from './config/server.env';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
+import { ExtensionModule } from './extension/extension.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
-      validate
+      validate,
     }),
     DatabaseModule,
-    UserModule
-    //todo ExtensionModule
-    //todo FileModule
+    UserModule,
+    ExtensionModule,
   ],
   controllers: [],
   providers: [AppConfiguration],
-  exports: []
+  exports: [],
 })
-export class AppModule {
-}
+export class AppModule {}

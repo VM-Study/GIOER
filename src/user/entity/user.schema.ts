@@ -9,9 +9,9 @@ import { Document, Types } from 'mongoose';
     transform: (doc, ret) => {
       delete ret._id;
       delete ret.__v;
-    }
+    },
   },
-  toObject: { virtuals: true }
+  toObject: { virtuals: true },
 })
 export class UserModel extends Document {
   @Prop({ required: true, trim: true, unique: true })
@@ -26,7 +26,7 @@ export class UserModel extends Document {
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);
 
-UserSchema.virtual('id').get(function(
+UserSchema.virtual('id').get(function (
   this: Document & { _id: Types.ObjectId },
 ) {
   return this._id.toHexString();
