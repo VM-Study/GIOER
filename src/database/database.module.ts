@@ -34,5 +34,7 @@ function getMongoConnectionString({
   databaseName,
   authDatabase,
 }): string {
-  return `mongodb://${username}:${password}@${host}:${port}/${databaseName}?authSource=${authDatabase}`;
+  const connectionString = `mongodb://${username}:${password}@${host}:${port}/${databaseName}?authSource=${authDatabase}`;
+  console.log(connectionString);
+  return connectionString;
 }
