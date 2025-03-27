@@ -11,16 +11,20 @@ function getMongooseOptions(): MongooseModuleAsyncOptions {
   return {
     imports: [ConfigModule],
     useFactory: async (config: ConfigService) => {
-      return {
-        uri: getMongoConnectionString({
-          username: config.get<string>('MONGO_USER'),
-          password: config.get<string>('MONGO_PASSWORD'),
-          host: config.get<string>('MONGO_HOST'),
-          port: config.get<number>('MONGO_PORT'),
-          authDatabase: config.get<string>('MONGO_AUTH_BASE'),
-          databaseName: config.get<string>('MONGO_DB'),
-        }),
-      };
+      const predefined = config.get<string>('MONGO_DB_CONNECTION_STRING');
+      const uri = predefined
+        ? predefined
+        : getMongoConnectionString({
+            username: config.get('MONGO_USER'),
+            password: config.get('MONGO_PASSWORD'),
+            host: config.get('MONGO_HOST'),
+            port: config.get('MONGO_PORT'),
+            authDatabase: config.get('MONGO_AUTH_BASE'),
+            databaseName: config.get('MONGO_DB'),
+          });
+
+      console.log('Mongo URI:', uri);
+      return { uri };
     },
     inject: [ConfigService],
   };
@@ -34,7 +38,5 @@ function getMongoConnectionString({
   databaseName,
   authDatabase,
 }): string {
-  const connectionString = `mongodb://${username}:${password}@${host}:${port}/${databaseName}?authSource=${authDatabase}`;
-  console.log(connectionString);
-  return connectionString;
+  return `mongodb://${username}:${password}@${host}:${port}/${databaseName}?authSource=${authDatabase}`;
 }
