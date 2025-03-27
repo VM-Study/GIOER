@@ -6,7 +6,7 @@ export class AppConfiguration {
   constructor(private readonly configService: NestConfigService) {}
 
   public get appPort(): number {
-    return this.configService.get<number>('APP_PORT') || parseInt(process.env.PORT, 10);
+    return parseInt(process.env.PORT, 10) || this.configService.get<number>('APP_PORT');
   }
 
   public get appPasswordSaltRounds(): number {
