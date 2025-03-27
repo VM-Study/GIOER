@@ -50,3 +50,11 @@ ExtensionSchema.virtual('id').get(function (
 ) {
   return this._id.toHexString();
 });
+
+ExtensionSchema.index({ category: 1 });
+ExtensionSchema.index({ downloadCount: -1 });
+ExtensionSchema.index({ uploadDate: -1 });
+ExtensionSchema.index({ rating: -1 });
+ExtensionSchema.index({ tags: 1 });
+ExtensionSchema.index({ "author.name": 1 });
+ExtensionSchema.index({ title: "text", description: "text" });

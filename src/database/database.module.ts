@@ -10,22 +10,18 @@ export class DatabaseModule {}
 function getMongooseOptions(): MongooseModuleAsyncOptions {
   return {
     imports: [ConfigModule],
-    useFactory: async (config: ConfigService) => {
-      const predefined = config.get<string>('MONGO_DB_CONNECTION_STRING');
-      const uri = predefined
-        ? predefined
-        : getMongoConnectionString({
-            username: config.get('MONGO_USER'),
-            password: config.get('MONGO_PASSWORD'),
-            host: config.get('MONGO_HOST'),
-            port: config.get('MONGO_PORT'),
-            authDatabase: config.get('MONGO_AUTH_BASE'),
-            databaseName: config.get('MONGO_DB'),
-          });
-
-      console.log('Mongo URI:', uri);
-      return { uri };
-    },
+    useFactory: async (config: ConfigService) => ({
+      uri:
+        config.get<string>('MONGO_DB_CONNECTION_STRING') ??
+        getMongoConnectionString({
+          username: config.get('MONGO_USER'),
+          password: config.get('MONGO_PASSWORD'),
+          host: config.get('MONGO_HOST'),
+          port: config.get('MONGO_PORT'),
+          authDatabase: config.get('MONGO_AUTH_BASE'),
+          databaseName: config.get('MONGO_DB'),
+        }),
+    }),
     inject: [ConfigService],
   };
 }
