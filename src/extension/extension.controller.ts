@@ -58,8 +58,6 @@ export class ExtensionController {
   }
 
   @Get(':ExtensionId')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get Extension by ID' })
   @ApiResponse({
     status: 200,
@@ -78,8 +76,6 @@ export class ExtensionController {
   }
 
   @Get('')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all Extension list' })
   @ApiResponse({
     status: 200,
