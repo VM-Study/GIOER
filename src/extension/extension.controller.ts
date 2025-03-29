@@ -57,7 +57,7 @@ export class ExtensionController {
     return fillDto(ExtensionDto, createdExtension.toPOJO());
   }
 
-  @Get(':ExtensionId')
+  @Get(':extensionId')
   @ApiOperation({ summary: 'Get Extension by ID' })
   @ApiResponse({
     status: 200,
@@ -66,11 +66,11 @@ export class ExtensionController {
   })
   @ApiResponse({ status: 404, description: 'Extension not found.' })
   public async getExtension(
-    @Param('ExtensionId', MongoIdValidationPipe) ExtensionId: string,
+    @Param('extensionId', MongoIdValidationPipe) extensionId: string,
   ): Promise<ExtensionDto> {
-    this.logger.log(`Retrieving Extension with ID: '${ExtensionId}'`);
+    this.logger.log(`Retrieving Extension with ID: '${extensionId}'`);
     const foundExtension =
-      await this.ExtensionService.findExtensionById(ExtensionId);
+      await this.ExtensionService.findExtensionById(extensionId);
 
     return fillDto(ExtensionDto, foundExtension.toPOJO());
   }
@@ -102,7 +102,7 @@ export class ExtensionController {
     return fillDto(ExtensionPaginationDto, transformedExtensionPagination);
   }
 
-  @Patch(':ExtensionId')
+  @Patch(':extensionId')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update Extension' })
@@ -114,20 +114,20 @@ export class ExtensionController {
   @ApiResponse({ status: 404, description: 'Extension not found.' })
   public async updateExtension(
     @GetUserId() userId: string,
-    @Param('ExtensionId', MongoIdValidationPipe) ExtensionId: string,
+    @Param('extensionId', MongoIdValidationPipe) extensionId: string,
     @Body() dto: UpdateExtensionDto,
   ): Promise<ExtensionDto> {
-    this.logger.log(`Updating Extension with ID '${ExtensionId}'`);
+    this.logger.log(`Updating Extension with ID '${extensionId}'`);
     const updatedExtension = await this.ExtensionService.updateExtensionById(
       userId,
-      ExtensionId,
+      extensionId,
       dto,
     );
 
     return fillDto(ExtensionDto, updatedExtension.toPOJO());
   }
 
-  @Delete(':ExtensionId')
+  @Delete(':extensionId')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete Extension by ID' })
@@ -139,12 +139,12 @@ export class ExtensionController {
   @ApiResponse({ status: 404, description: 'Extension not found.' })
   public async deleteExtension(
     @GetUserId() userId: string,
-    @Param('ExtensionId', MongoIdValidationPipe) ExtensionId: string,
+    @Param('extensionId', MongoIdValidationPipe) extensionId: string,
   ): Promise<ExtensionDto> {
-    this.logger.log(`Attempting to delete Extension with ID: ${ExtensionId}`);
+    this.logger.log(`Attempting to delete Extension with ID: ${extensionId}`);
     const deletedExtension = await this.ExtensionService.deleteExtensionById(
       userId,
-      ExtensionId,
+      extensionId,
     );
     this.logger.log(`Extension deleted with ID: '${deletedExtension.id}'`);
 

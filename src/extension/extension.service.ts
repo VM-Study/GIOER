@@ -74,12 +74,12 @@ export class ExtensionService {
   }
 
   public async findExtensionById(
-    ExtensionId: string,
+    extensionId: string,
   ): Promise<ExtensionEntity> {
-    this.logger.log(`Looking for Extension with ID: '${ExtensionId}'`);
-    const foundExtension = await this.extensionRepository.findById(ExtensionId);
+    this.logger.log(`Looking for Extension with ID: '${extensionId}'`);
+    const foundExtension = await this.extensionRepository.findById(extensionId);
     if (!foundExtension) {
-      this.logger.warn(`Extension not found with ID: '${ExtensionId}'`);
+      this.logger.warn(`Extension not found with ID: '${extensionId}'`);
       throw new NotFoundException(EXTENSION_NOT_FOUND);
     }
 
@@ -88,15 +88,15 @@ export class ExtensionService {
 
   public async updateExtensionById(
     userId: string,
-    ExtensionId: string,
+    extensionId: string,
     dto: UpdateExtensionDto,
   ): Promise<ExtensionEntity> {
-    this.logger.log(`Updating Extension with ID: '${ExtensionId}'`);
+    this.logger.log(`Updating Extension with ID: '${extensionId}'`);
 
     const updatedExtension =
-      await this.extensionRepository.findById(ExtensionId);
+      await this.extensionRepository.findById(extensionId);
     if (!updatedExtension) {
-      this.logger.warn(`Extension not found with ID: '${ExtensionId}'`);
+      this.logger.warn(`Extension not found with ID: '${extensionId}'`);
       throw new NotFoundException(EXTENSION_NOT_FOUND);
     }
     const foundUser = await this.userService.findUserById(userId);
@@ -107,7 +107,7 @@ export class ExtensionService {
     // @ts-ignore
     if (foundUser.id !== updatedExtension.author._id.toString()) {
       this.logger.warn(
-        `User ID '${userId}' do not have access to Extension ID '${ExtensionId}'`,
+        `User ID '${userId}' do not have access to Extension ID '${extensionId}'`,
       );
       throw new ForbiddenException(NO_ACCESS);
     }
@@ -119,18 +119,18 @@ export class ExtensionService {
     if (dto.tags !== undefined) updatedExtension.tags = dto.tags;
     if (dto.archived !== undefined) updatedExtension.archived = dto.archived;
 
-    return this.extensionRepository.update(ExtensionId, updatedExtension);
+    return this.extensionRepository.update(extensionId, updatedExtension);
   }
 
   public async deleteExtensionById(
     userId: string,
-    ExtensionId: string,
+    extensionId: string,
   ): Promise<ExtensionEntity> {
-    this.logger.log(`Deleting Extension with ID: '${ExtensionId}'`);
+    this.logger.log(`Deleting Extension with ID: '${extensionId}'`);
 
-    const foundExtension = await this.extensionRepository.findById(ExtensionId);
+    const foundExtension = await this.extensionRepository.findById(extensionId);
     if (!foundExtension) {
-      this.logger.warn(`Extension not found with ID: '${ExtensionId}'`);
+      this.logger.warn(`Extension not found with ID: '${extensionId}'`);
       throw new NotFoundException(EXTENSION_NOT_FOUND);
     }
     const foundUser = await this.userService.findUserById(userId);
@@ -141,20 +141,20 @@ export class ExtensionService {
     // @ts-ignore
     if (foundUser.id !== foundExtension.author._id.toString()) {
       this.logger.warn(
-        `User ID '${userId}' do not have access to Extension ID '${ExtensionId}'`,
+        `User ID '${userId}' do not have access to Extension ID '${extensionId}'`,
       );
       throw new ForbiddenException(NO_ACCESS);
     }
 
     const deletedExtension =
-      await this.extensionRepository.deleteById(ExtensionId);
-    this.logger.log(`Extension with ID: '${ExtensionId}' deleted`);
+      await this.extensionRepository.deleteById(extensionId);
+    this.logger.log(`Extension with ID: '${extensionId}' deleted`);
 
     return deletedExtension;
   }
 
-  public async exists(ExtensionId: string): Promise<boolean> {
-    return this.extensionRepository.exists(ExtensionId);
+  public async exists(extensionId: string): Promise<boolean> {
+    return this.extensionRepository.exists(extensionId);
   }
 
   public async findExtensionByQuery(
