@@ -27,8 +27,8 @@ import { ExtensionPaginationDto } from './dto/extension-pagination.dto';
 import { ExtensionQuery } from './dto/extension.query';
 import { UpdateExtensionDto } from './dto/update-extension.dto';
 
-@ApiTags('Extensions')
-@Controller('Extensions')
+@ApiTags('extensions')
+@Controller('extensions')
 export class ExtensionController {
   private readonly logger = new Logger(ExtensionController.name);
 
