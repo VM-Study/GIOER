@@ -34,5 +34,7 @@ function getMongoConnectionString({
   databaseName,
   authDatabase,
 }): string {
-  return `mongodb://${username}:${password}@${host}:${port}/${databaseName}?authSource=${authDatabase}`;
+  // return `mongodb://${username}:${password}@${host}:${port}/${databaseName}?authSource=${authDatabase}`;
+  return `mongodb+srv://${username}:${password}@cluster0.gdozkop.mongodb.net/${databaseName}?retryWrites=true&w=majority&appName=Cluster0`;
+  
 }

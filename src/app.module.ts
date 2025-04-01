@@ -5,6 +5,7 @@ import { validate } from './config/server.env';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { ExtensionModule } from './extension/extension.module';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ExtensionModule } from './extension/extension.module';
     DatabaseModule,
     UserModule,
     ExtensionModule,
+    FileModule
   ],
   controllers: [],
   providers: [AppConfiguration],
