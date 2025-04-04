@@ -14,6 +14,7 @@ export class ExtensionEntity extends Entity implements Extension {
   rating: number;
   downloadCount: number;
   archived: boolean;
+  fileId: string;
 
   constructor(extension?: Extension) {
     super();

@@ -47,6 +47,13 @@ export class ExtensionDto {
   public authorId: string;
 
   @ApiProperty({
+    example: '67efee88ae12078de2411ae5',
+    description: 'The unique identifier of the file',
+  })
+  @Expose()
+  public fileId: string;
+
+  @ApiProperty({
     example: 'John Doe',
     description: 'The name of the author',
   })

@@ -63,6 +63,7 @@ export class ExtensionService {
       rating: 0,
       downloadCount: 0,
       archived: false,
+      fileId: "",
     };
 
     const ExtensionEntity = ExtensionFactory.createEntity(ExtensionData);

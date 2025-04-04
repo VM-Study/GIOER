@@ -10,6 +10,7 @@ export interface Extension {
   author: User;
   uploadDate: Date;
   rating: number;
-  downloadCount: number;
   archived: boolean;
+  downloadCount: number;
+  fileId: string;
 }

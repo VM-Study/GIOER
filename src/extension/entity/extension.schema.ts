@@ -28,19 +28,22 @@ export class ExtensionModel extends Document {
   tags: string[];
 
   @Prop({ type: Types.ObjectId, ref: 'UserModel', required: true })
-  public author: UserModel;
+  author: UserModel;
+
+  @Prop({ trim: true })
+  fileId: string;
 
   @Prop({ required: true })
   uploadDate: Date;
 
   @Prop({ required: true })
-  public rating: number;
+  rating: number;
 
   @Prop({ required: true })
-  public downloadCount: number;
+  downloadCount: number;
 
   @Prop({ required: true })
-  public archived: boolean;
+  archived: boolean;
 }
 
 export const ExtensionSchema = SchemaFactory.createForClass(ExtensionModel);
