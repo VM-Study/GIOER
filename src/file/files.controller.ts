@@ -4,6 +4,7 @@ import { FileService } from './file.service';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { CreateFileDto } from './dto/create-file.dto';
+import {FileDto} from './dto/file.dto';
 import { File } from './entity/file.schema';
 import {diskStorage} from 'multer';
 import { extname } from 'path';
@@ -11,21 +12,44 @@ import { Response } from 'express';
 import { LoggingInterceptor } from './logging.interceptor';
 import { readFile } from 'fs';
 const fs = require('fs');
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 
-
+@ApiTags('file')
 @Controller('file')
 export class FileController {
 
 constructor(private readonly FileService: FileService){}
 
+//Method to handle file download action
 @Get('/download/:id')
-  downloadFile(@Param('id') id:string){
+@ApiOperation({summary: 'Download file using its unique ID, it is linked with the extension entity and ID should be provided by clicking a link in FE.'})
+@ApiResponse({
+  status: 200,
+  description: 'file is succesfully download from DB',
+})
+@ApiResponse({status: 400,description:'Error in request, use the ID to download file'})
+downloadFile(@Param('id') id:string){
   return this.FileService.handleDownloadFile(id);
 }
     
 
+
+//Method to handle file upload action
   @Post('/upload')
+  @ApiBearerAuth()
+  @ApiOperation({summary: 'Create the actual file'})
+  @ApiResponse({
+    status: 201,
+    description: 'file is succesfully saved in DB',
+    type: FileDto
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: Express.Multer.File, @Body() dto: CreateFileDto): Promise<File>{
     
