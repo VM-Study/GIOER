@@ -9,6 +9,7 @@ import { CreateFileDto } from './dto/create-file.dto';
 
 
 
+
 @Injectable()
 export class FileService{
 
@@ -16,11 +17,13 @@ export class FileService{
     
 
     //function to add file in folder and data in DB
-    async handleUploadFile(file: Express.Multer.File, dto: CreateFileDto):Promise<File>{
+    async handleUploadFile(file: Express.Multer.File, dto: CreateFileDto, id: string):Promise<File>{
 
        const savedFile = new this.fileModel(dto);
        savedFile.fileName = `${file.originalname}--${Date.now()}`;
        savedFile.fileUrl = file.path;
+       savedFile.fileOwner = id;
+       savedFile.fileExtensionId = dto.extensionID;
        savedFile.uploadDate = (new Date().toISOString().split('T')[0]);
        savedFile.save()
        console.log(savedFile);
@@ -39,6 +42,7 @@ export class FileService{
         const fileName = ((await fileInfoFromDB).fileName);
         
         console.log(fileUrl);
+
         if(!fileInfoFromDB){
             return console.log('DB not reached');
         }
@@ -48,4 +52,14 @@ export class FileService{
             disposition: `attachment; filename=${fileName}`,
         });
     }
+
+    //function to delete the file recored from DB and also file from server folder
+
+    // handleDeleteFile(id: string, ownerId:string){
+    //     console.log('ok');
+    //     const fileInfoFromDB = this.fileModel.findById(id,'fileUrl fileName').exec();
+    //     if(!fileInfoFromDB){
+    //         return console.log('DB not reached');
+    //     }
+    // }
 }

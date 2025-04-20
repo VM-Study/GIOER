@@ -7,5 +7,5 @@ export class CreateFileDto{
     //     example: 'My File',
     //     description: 'The title of the file uploaded for an extension',
     // })
-    // public fileNameee: string
+    public extensionID: string
 }

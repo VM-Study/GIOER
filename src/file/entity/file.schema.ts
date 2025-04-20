@@ -13,6 +13,12 @@ export class File{
     fileUrl: string
 
     @Prop()
+    fileOwner: string
+
+    @Prop()
+    fileExtensionId: string
+
+    @Prop()
     uploadDate: string
 }
 export const FileSchema = SchemaFactory.createForClass(File);
