@@ -1,4 +1,4 @@
-import { Injectable, StreamableFile } from '@nestjs/common';
+import { Injectable, StreamableFile,InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { createReadStream } from 'fs';
 import { join } from 'path';
@@ -15,51 +15,45 @@ export class FileService{
 
     constructor(@InjectModel(File.name) private fileModel: Model<File>){}
     
-
-    //function to add file in folder and data in DB
+    //service to add file in folder and save related data in DB
     async handleUploadFile(file: Express.Multer.File, dto: CreateFileDto, id: string):Promise<File>{
-
-       const savedFile = new this.fileModel(dto);
-       savedFile.fileName = `${file.originalname}--${Date.now()}`;
-       savedFile.fileUrl = file.path;
-       savedFile.fileOwner = id;
-       savedFile.fileExtensionId = dto.extensionID;
-       savedFile.uploadDate = (new Date().toISOString().split('T')[0]);
-       savedFile.save()
-       console.log(savedFile);
-      return savedFile;
-
-    }
-
-
-    //function to get file from folder
-    async handleDownloadFile(id: string): Promise<any>{
-        console.log('reached')
-        //retrieve file name from DB using unique ID
-        const fileInfoFromDB = this.fileModel.findById(id,'fileUrl fileName').exec();
+       try{
+            const savedFile = new this.fileModel(dto);
+            savedFile.fileName = `${Date.now()}--${file.originalname}`;
+            savedFile.fileUrl = file.path;
+            savedFile.fileOwner = id;
+            savedFile.fileExtensionId = dto.fileExtensionId;
+            savedFile.uploadDate = (new Date().toISOString().split('T')[0]);
+            savedFile.save()
+            return savedFile;
+       }catch(error){
+            throw new InternalServerErrorException("ERROR: Database connection! File can't be uploaded!");
+       } 
        
-        const fileUrl = (await (fileInfoFromDB)).fileUrl;
-        const fileName = ((await fileInfoFromDB).fileName);
-        
-        console.log(fileUrl);
 
-        if(!fileInfoFromDB){
-            return console.log('DB not reached');
-        }
-        // serach for file in folder
-        const file = createReadStream(join(process.cwd(),`./${fileUrl}`));
-        return new StreamableFile(file,{
-            disposition: `attachment; filename=${fileName}`,
-        });
     }
 
-    //function to delete the file recored from DB and also file from server folder
 
-    // handleDeleteFile(id: string, ownerId:string){
-    //     console.log('ok');
-    //     const fileInfoFromDB = this.fileModel.findById(id,'fileUrl fileName').exec();
-    //     if(!fileInfoFromDB){
-    //         return console.log('DB not reached');
-    //     }
-    // }
+    //service to download file from folder
+    async handleDownloadFile(id: string): Promise<any>{
+        try{
+             //retrieve file name and URL from DB using unique ID the parent extension
+            const fileInfoFromDB = this.fileModel.findOne({fileExtensionId: id},'fileUrl fileName').exec();
+            const fileUrl = (await (fileInfoFromDB)).fileUrl;
+            const fileName = ((await fileInfoFromDB).fileName);
+            
+    
+            // serach for file in folder and download it
+            const file = createReadStream(join(process.cwd(),`./${fileUrl}`));
+            return new StreamableFile(file,{
+                disposition: `attachment; filename=${fileName}`,
+            });
+        }catch(error){
+            throw new InternalServerErrorException("ERROR: Database connection! File can't be downloded");
+        }
+     
+
+       
+    }
+
 }

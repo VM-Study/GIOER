@@ -12,7 +12,7 @@ import { File, FileSchema } from "./entity/file.schema";
             storage: diskStorage({
                 destination: './uploads',
                 filename:(req,file,cb)=>{
-                    const filename = `${file.originalname}--${Date.now()}`;
+                    const filename = `${Date.now()}--${file.originalname}`;
                     cb(null,filename);
                 },
             }),

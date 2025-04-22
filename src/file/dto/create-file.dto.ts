@@ -2,10 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, isString, IsString, Length } from 'class-validator';
 
 export class CreateFileDto{
-    // @IsString()
-    // @ApiProperty({
-    //     example: 'My File',
-    //     description: 'The title of the file uploaded for an extension',
-    // })
-    public extensionID: string
+  
+    @ApiProperty({
+        example: '60d0fe4f5311236168a109c',
+        description: 'The unique identifier of the extension parent of the file',
+    })
+    public fileExtensionId: string
 }

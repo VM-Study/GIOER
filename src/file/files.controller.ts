@@ -53,12 +53,14 @@ async downloadFile(@Param('id') id:string){
 
 //Method to handle file upload action
   @Post('/upload')
+  //Verify that someone is login to allow file uploading, otherwise server will refuse action
   @UseGuards(JwtAuthGuard)
+  ///
   @ApiBearerAuth()
-  @ApiOperation({summary: 'Create the actual file'})
+  @ApiOperation({summary: 'Save the extension file in server'})
   @ApiResponse({
     status: 201,
-    description: 'file is succesfully saved in DB',
+    description: 'File is succesfully uploded!',
     type: FileDto
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
